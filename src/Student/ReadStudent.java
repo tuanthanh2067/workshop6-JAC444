@@ -14,11 +14,35 @@ public class ReadStudent {
         }
     }
 
-    public static void writeStudentsToFile(ArrayList<Student> students) {
+    public static ArrayList<Student> ReadStudentsFromFile(String file) {
+        ArrayList<Student> students = new ArrayList<>();;
         try {
-            FileOutputStream fos = new FileOutputStream("students.out");
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            boolean cont = true;
+            while (cont) {
+                if (fis.available() != 0) {
+                    Student student = (Student) ois.readObject();
+                    students.add(student);
+                }
+                else cont = false;
+            }
+//            students = (ArrayList<Student>) ois.readObject();
+            fis.close();
+        } catch (Throwable e) {
+            System.err.println(e);
+        }
+        return students;
+    }
+
+    public static void writeStudentsToFile(ArrayList<Student> students, String file) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(students);
+            for (Student student : students) {
+                oos.writeObject(student);
+            }
+//            oos.writeObject(students);
 
             oos.flush(); // make sure this happens right now
             fos.close(); // close
@@ -47,6 +71,4 @@ public class ReadStudent {
         }
         return new Student(stnId, arr[1], arr[2], courses);
     }
-
-
 }

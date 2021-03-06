@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Student> students = new ArrayList<Student>();
+        ArrayList<Student> students = new ArrayList<>();
         try {
             Scanner sc = new Scanner(System.in);
             int input = 1;
@@ -20,7 +20,13 @@ public class Main {
                 System.out.print("Do you want to continue? (1: Yes/ 0: Done): ");
                 input = sc.nextInt();
             }
-            ReadStudent.writeStudentsToFile(students);
+            ReadStudent.writeStudentsToFile(students, "students.out");
+            ArrayList<Student> returnStudents = ReadStudent.ReadStudentsFromFile("students.out");
+
+            for (Student returnStudent : returnStudents) {
+                System.out.println(returnStudent);
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

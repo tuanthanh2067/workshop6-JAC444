@@ -33,7 +33,7 @@ public class Student implements Serializable {
         this.courses = new ArrayList<>(courses);
     }
 
-    public int getStnI() {
+    public int getStnId() {
         return this.stdId;
     }
 
@@ -47,5 +47,10 @@ public class Student implements Serializable {
 
     public ArrayList<String> getCourses() {
         return this.courses;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + getStnId() + " Name: " + getFirstName() + " " + getLastName() + " Courses: " + getCourses().toString();
     }
 }
