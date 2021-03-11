@@ -1,33 +1,47 @@
 package Student;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class ReadStudent {
-    private static boolean isParsable(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (final NumberFormatException e) {
-            return false;
+public class ReadStudent extends JFrame {
+    public ReadStudent() {
+        super("Read student Frame");
+        setLayout(new FlowLayout());
+
+        ArrayList<Student> returnStudents = ReadStudentsFromFile("students.out");
+
+        for (int i = 0; i < returnStudents.size(); i++) {
+            JLabel label = new JLabel("Student " + (i + 1));
+            add(label);
+
+            JTextField textField = new JTextField(returnStudents.get(i).toString());
+            textField.setEditable(false);
+            add(textField);
         }
+
+        JButton addStudentsBtn = new JButton("Add new students");
+        add(addStudentsBtn);
+
+        addStudentsBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WriteStudent writeStudentFrame = new WriteStudent();
+            }
+        });
+
     }
 
-    public static ArrayList<Student> ReadStudentsFromFile(String file) {
+    private static ArrayList<Student> ReadStudentsFromFile(String file) {
         ArrayList<Student> students = new ArrayList<>();;
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            boolean cont = true;
-            while (cont) {
-                if (fis.available() != 0) {
-                    Student student = (Student) ois.readObject();
-                    students.add(student);
-                }
-                else cont = false;
-            }
-//            students = (ArrayList<Student>) ois.readObject();
+
+            students = (ArrayList<Student>) ois.readObject();
             fis.close();
         } catch (Throwable e) {
             System.err.println(e);
@@ -35,40 +49,10 @@ public class ReadStudent {
         return students;
     }
 
-    public static void writeStudentsToFile(ArrayList<Student> students, String file) {
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            for (Student student : students) {
-                oos.writeObject(student);
-            }
-//            oos.writeObject(students);
-
-            oos.flush(); // make sure this happens right now
-            fos.close(); // close
-        }  catch(Throwable e) {
-            System.err.println(e);
-        }
-    }
-
-    public static Student readStudentFromKeyBoard() throws Exception {
-        Scanner sc = new Scanner(System.in);
-        String temp = sc.nextLine();
-        String[] arr = temp.split("\\s+");
-
-        if (arr.length <= 2) {
-            throw new Exception("Not enough information");
-        }
-
-        if (!isParsable(arr[0])) {
-            throw new Exception("Wrong id format");
-        }
-        int stnId = Integer.parseInt(arr[0]);
-
-        ArrayList<String> courses = new ArrayList<String>();
-        for (int i = 3; i < arr.length; i++) {
-            courses.add(arr[i]);
-        }
-        return new Student(stnId, arr[1], arr[2], courses);
+    public static void main(String[] args) {
+        ReadStudent readStudentFrame = new ReadStudent();
+        readStudentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        readStudentFrame.setSize(425, 200);
+        readStudentFrame.setVisible(true);
     }
 }
