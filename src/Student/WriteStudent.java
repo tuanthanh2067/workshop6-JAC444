@@ -36,8 +36,11 @@ public class WriteStudent extends JFrame {
                 try {
                     ArrayList<Student> students = readLines(textarea1.getText());
                     writeStudentsToFile(students, "students.out");
+                    dispose();
                 } catch(Throwable err) {
                     System.err.println(err);
+                    JOptionPane.showMessageDialog(WriteStudent.this, String.format(
+                            "There's an error: %s", err));
 
                 }
             }

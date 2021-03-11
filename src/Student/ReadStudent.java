@@ -2,8 +2,6 @@ package Student;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -11,6 +9,8 @@ public class ReadStudent extends JFrame {
     public ReadStudent() {
         super("Read student Frame");
         setLayout(new FlowLayout());
+        this.setSize(425, 200);
+        this.setVisible(true);
 
         ArrayList<Student> returnStudents = ReadStudentsFromFile("students.out");
 
@@ -22,17 +22,6 @@ public class ReadStudent extends JFrame {
             textField.setEditable(false);
             add(textField);
         }
-
-        JButton addStudentsBtn = new JButton("Add new students");
-        add(addStudentsBtn);
-
-        addStudentsBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                WriteStudent writeStudentFrame = new WriteStudent();
-            }
-        });
-
     }
 
     private static ArrayList<Student> ReadStudentsFromFile(String file) {
@@ -49,10 +38,5 @@ public class ReadStudent extends JFrame {
         return students;
     }
 
-    public static void main(String[] args) {
-        ReadStudent readStudentFrame = new ReadStudent();
-        readStudentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        readStudentFrame.setSize(425, 200);
-        readStudentFrame.setVisible(true);
-    }
+
 }
