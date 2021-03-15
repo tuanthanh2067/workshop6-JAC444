@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ReadStudent extends JFrame {
+    private static String error;
     public ReadStudent() {
         super("Read student Frame");
         setLayout(new FlowLayout());
@@ -13,6 +14,10 @@ public class ReadStudent extends JFrame {
         this.setVisible(true);
 
         ArrayList<Student> returnStudents = ReadStudentsFromFile("students.out");
+        if (!error.equals("")) {
+            JOptionPane.showMessageDialog(ReadStudent.this, error);
+            dispose();
+        }
 
         for (int i = 0; i < returnStudents.size(); i++) {
             JLabel label = new JLabel("Student " + (i + 1));
@@ -27,6 +32,7 @@ public class ReadStudent extends JFrame {
     private static ArrayList<Student> ReadStudentsFromFile(String file) {
         ArrayList<Student> students = new ArrayList<>();;
         try {
+            error = "";
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
@@ -34,6 +40,7 @@ public class ReadStudent extends JFrame {
             fis.close();
         } catch (Throwable e) {
             System.err.println(e);
+            error = "Can not open the file";
         }
         return students;
     }

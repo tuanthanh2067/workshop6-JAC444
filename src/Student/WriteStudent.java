@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class WriteStudent extends JFrame {
+    private static String error;
     public WriteStudent() {
         super("Write student Frame");
         setLayout(new FlowLayout());
@@ -36,12 +37,15 @@ public class WriteStudent extends JFrame {
                 try {
                     ArrayList<Student> students = readLines(textarea1.getText());
                     writeStudentsToFile(students, "students.out");
-                    dispose();
-                } catch(Throwable err) {
+                    if (!error.equals("")) {
+                        JOptionPane.showMessageDialog(WriteStudent.this, error);
+                    } else {
+                        dispose();
+                    }
+                } catch(Throwable err){
                     System.err.println(err);
                     JOptionPane.showMessageDialog(WriteStudent.this, String.format(
                             "There's an error: %s", err));
-
                 }
             }
         });
@@ -49,6 +53,7 @@ public class WriteStudent extends JFrame {
 
     public static void writeStudentsToFile(ArrayList<Student> students, String file) {
         try {
+            error = "";
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(students);
@@ -57,6 +62,7 @@ public class WriteStudent extends JFrame {
             fos.close(); // close
         }  catch(Throwable e) {
             System.err.println(e);
+            error = "Can not open the file";
         }
     }
 
